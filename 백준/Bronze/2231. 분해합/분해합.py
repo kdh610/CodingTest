@@ -1,5 +1,4 @@
 
-
 n = int(input())
 answer = n
 
@@ -11,6 +10,7 @@ for i in range(1,n+1):
 
     if result == n:
         answer = min(answer,i)
+        break
 
 if answer==n:
     print(0)
