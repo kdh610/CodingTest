@@ -1,6 +1,7 @@
 
+
 n = int(input())
-answer = n
+answer = 0
 
 for i in range(1,n+1):
     result=i
@@ -9,10 +10,8 @@ for i in range(1,n+1):
         result += int(j)
 
     if result == n:
-        answer = min(answer,i)
+        answer = i
         break
 
-if answer==n:
-    print(0)
-else:
-    print(answer)
+
+print(answer)
