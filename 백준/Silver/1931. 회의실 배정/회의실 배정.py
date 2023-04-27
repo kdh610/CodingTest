@@ -1,17 +1,16 @@
+import sys
 n = int(input())
 
-times = []
-for i in range(n):
-    times.append(list(map(int, input().split())))
+meeting = [ list(map(int,sys.stdin.readline().split())) for _ in range(n)]
 
-times.sort(key=lambda x:(x[1],x[0]))
+meeting.sort(key=lambda x:[x[1],x[0]])
 
-cnt = 1
-end_time = times[0][1]
+cnt=1
+end = meeting[0][1]
 
 for i in range(1,n):
-    if times[i][0] >= end_time:
+    if meeting[i][0] >= end:
         cnt +=1
-        end_time = times[i][1]
+        end = meeting[i][1]
 
 print(cnt)
