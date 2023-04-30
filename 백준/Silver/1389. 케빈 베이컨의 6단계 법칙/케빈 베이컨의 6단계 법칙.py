@@ -1,39 +1,30 @@
 import sys
-from collections import *
+INF=int(1e9)
+n,m = map(int,input().split())
 
-n,m = map(int,sys.stdin.readline().split())
-friend = defaultdict(list)
+friends = [[INF] *(n+1) for _ in range(n+1)]
+
+
 for i in range(m):
-    a,b = map(int,sys.stdin.readline().split())
-    friend[a].append(b)
-    friend[b].append(a)
+    a, b = map(int, sys.stdin.readline().split())
+    friends[a][b] =1
+    friends[b][a] = 1
 
-def bfs(person):
-    Q = deque()
-    Q.append(person)
-    visit = [0]*(n+1)
-    while Q:
-        p = Q.popleft()
+for i in range(n+1):
+    for j in range(n+1):
+        if i==j:
+            friends[i][j]=0
 
-        for i in friend[p]:
-            if i == person:
-                continue
-            if visit[i] == 0:
-                visit[i] = visit[p] + 1
-                Q.append(i)
-    return sum(visit)
+for k in range(1,n+1):
+    for a in range(1,n+1):
+        for b in range(1,n+1):
+            friends[a][b] = min(friends[a][b], friends[a][k]+friends[k][b])
 
-result = []
-MIN = 10000000
+kevin = INF
+
 for i in range(1,n+1):
-    x = bfs(i)
-    if MIN > x:
-        MIN = x
-        result = i
+    if kevin > sum(friends[i][1:]):
+        kevin=sum(friends[i][1:])
+        answer = i
 
-print(result)
-
-
-
-
-
+print(answer)
