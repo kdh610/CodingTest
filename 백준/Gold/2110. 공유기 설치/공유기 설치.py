@@ -1,31 +1,29 @@
 import sys
 
-n, c = map(int,input().split())
-house = [int(sys.stdin.readline()) for _ in range(n)]
-house.sort()
-answer = 0
-left, right = 1, house[-1]
+n,c = map(int,input().split())
 
+house = [ int(sys.stdin.readline()) for _ in range(n)]
+
+
+house.sort()
+
+left =0
+right = int(1e9)
+answer=0
 while left<=right:
     mid = (left+right)//2
-    cnt = 1
-    cur = house[0]
-
+    cnt=1
+    temp= house[0]
     for i in range(1,len(house)):
-        dis = house[i] -cur
-        if dis < mid:
-            continue
-        else:
+        if house[i] - temp >= mid:
             cnt+=1
-            cur = house[i]
+            temp=house[i]
 
     if cnt < c:
         right = mid-1
-    elif cnt>=c:
+    else:
+        answer=max(answer,mid)
         left = mid+1
-        answer = max(answer, mid)
-
-
 
 
 print(answer)
