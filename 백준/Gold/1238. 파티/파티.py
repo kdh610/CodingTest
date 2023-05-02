@@ -35,11 +35,9 @@ def dijkstra(start):
     return distance
 
 answer = 0
-
+arrival = dijkstra(x)
 for i in range(1,n+1):
     depart = dijkstra(i)
-
-    arrival = dijkstra(x)
 
     answer=max(answer,depart[x]+arrival[i])
 
