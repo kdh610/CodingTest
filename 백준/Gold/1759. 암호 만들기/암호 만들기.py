@@ -21,7 +21,7 @@ if len(jaeum)<2 or len(moeum)<1:
     exit()
 
 moeum.sort()
-jaeum.sort()
+jaeum.sort() 
 
 
 for i in range(1,len(moeum)+1):
