@@ -7,11 +7,10 @@ dx = [1,-1,0,0]
 
 for _ in range(T):
     # 입력값 초기화
-    w, h = map(int,input().split())
+    w, h = map(int,sys.stdin.readline().split())
     building=[ list(sys.stdin.readline().strip()) for _ in range(h)]
 
     answer = []
-    # visit = [[False] * w for _ in range(h)]
     fire=[]
     Q = deque()
 
@@ -19,7 +18,6 @@ for _ in range(T):
         for j in range(w):
             if building[i][j]=='*':
                 Q.append((i,j))
-                # visit[i][j]=True
             elif building[i][j]=='@':
                 cur = (i,j)
                 building[i][j]=0
@@ -40,13 +38,13 @@ for _ in range(T):
                     Q.append((ny, nx))
                 # 불일때
                 elif building[y][x]=='*' and building[ny][nx]!='#' and  building[ny][nx]!='*':
-                    # visit[ny][nx]=True
                     building[ny][nx] = '*'
                     Q.append((ny,nx))
             else:
                 if isinstance(building[y][x], int):
                     answer.append(building[y][x] + 1)
                     break
+
 
 
     if len(answer)==0:
