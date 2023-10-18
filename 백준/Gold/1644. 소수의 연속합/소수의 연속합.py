@@ -1,39 +1,38 @@
 import math
 
 n = int(input())
-
-prime = [True]*(n+1)
+arr = [True for i in range(n+1)]
 
 for i in range(2,int(math.sqrt(n))+1):
-    if prime[i]==True:
+    if arr[i] == True:
         j=2
         while i*j<=n:
-            prime[i*j]=False
+            arr[i*j]=False
             j+=1
 
-
-s,e=2,2
-sum = 0
-cnt = 0
-
+prime = []
 for i in range(2,n+1):
-    if prime[i]==True:
-        while sum<n and e<n+1:
-            if prime[e]==True:
+    if arr[i]==True:
+        prime.append(i)
 
-                sum+=e
-
-            e += 1
-
-        if sum==n:
-            cnt+=1
+left, right = 0,1
+cnt =0
+if len(prime)>=1:
+    sum = prime[0]
 
 
-
-
-        sum-=i
-
-
-
+while left<=right and right<=len(prime):
+    if sum==n:
+        cnt+=1
+        sum -= prime[left]
+        left+=1
+    elif sum<n:
+        if right>=len(prime):
+            break
+        sum+=prime[right]
+        right += 1
+    elif sum>n:
+        sum-=prime[left]
+        left+=1
 
 print(cnt)
