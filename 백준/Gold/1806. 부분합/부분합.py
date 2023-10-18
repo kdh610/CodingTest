@@ -1,28 +1,26 @@
-import sys
 
 n,s = map(int,input().split())
-arr = list(map(int,sys.stdin.readline().split()))
+arr = list(map(int,input().split()))
 
-sum=0
-answer=int(1e9)+1
-start,end = 0,0
+left, right = 0,1
+sum = arr[0]
+ans = len(arr)
+possible = False
 
-for i in range(n):
-    while sum<s and end<n:
-        sum += arr[end]
+while left<=right :
+    if sum<s:
+        if right>=n:
+            break
+        sum+=arr[right]
+        right+=1
 
-        end+=1
+    elif sum>=s:
+        possible = True
+        ans = min(ans,right-left)
+        sum-=arr[left]
+        left+=1
 
-    if sum>=s:
-        answer=min(answer,end-i)
-
-    sum-=arr[i]
-
-if answer==int(1e9)+1:
-    print(0)
+if possible:
+    print(ans)
 else:
-    print(answer)
-
-
-
-
+    print(0)
