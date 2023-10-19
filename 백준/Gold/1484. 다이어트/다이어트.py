@@ -1,26 +1,37 @@
-
+import math
 
 G = int(input())
 
-start, end =1,1
 
 
 answer = []
-while True:
-    if end-start==1 and (end**2 - start**2) >G:
+left, right =1,1
+
+
+
+while left<=right:
+
+    dif = right**2 - left**2
+    if right - left == 1 and dif > G:
         break
+    if dif < G:
+        right+=1
+    elif dif > G:
+        left +=1
+    elif dif==G:
+        answer.append(right)
+        left+=1
 
-    if (end**2 - start**2) == G:
-        answer.append(end)
-
-    if (end**2 - start**2) <=G:
-        end+=1
-    else:
-        start+=1
-
-
-if len(answer)>0:
-    for i in answer:
-        print(i)
-else:
+if len(answer)==0:
     print(-1)
+else:
+    for i in answer:
+            print(int(i))
+
+
+
+
+
+
+
+
