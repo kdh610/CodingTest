@@ -1,38 +1,35 @@
 from collections import *
 import sys
 
-# 접시수, 초밥종류, 연속해서 먹는 접시, 쿠폰번호
-N, d, k, c = map(int,input().split())
+N, d, k, c = map(int, input().split())
+belt = [int(sys.stdin.readline().strip()) for _ in range(N)]
 
-belt = [ int(sys.stdin.readline().strip()) for _ in range(N)]
+left, right = 0,0
+sushi = defaultdict(int)
 
-start,end=0,0
-answer = 0
-temp = deque()
+answer=0
+temp=0
 
-while True:
-    cnt = 0
-
-    while len(temp)<k:
-        temp.append(belt[end])
-        end+=1
+sushi[c]=1
+while right<k:
+    sushi[belt[right]]+=1
+    right+=1
 
 
-    if c not in temp:
-        cnt=1
+while left<N:
+    answer = max(answer, len(sushi))
 
-    cnt += len(set(temp))
+    sushi[belt[left]]-=1
+    sushi[belt[right]]+=1
 
+    if sushi[belt[left]]==0:
+        del sushi[belt[left]]
 
-    answer = max(answer,cnt)
+    right=(right+1)%N
+    left=(left+1)
 
-    end= (end+1)%N
-    start= (start+1)%N
-
-    temp.popleft()
-    temp.append(belt[end-1])
-
-    if start==0 and end==k:
-        break
 
 print(answer)
+
+
+
