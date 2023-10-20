@@ -1,38 +1,46 @@
+import sys
 
+N = int(input())
+M = int(input())
 
-n = int(input())
-m = int(input())
+cities = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
+plan = list(map(int,sys.stdin.readline().split()))
 
-graph = [list(map(int,input().split())) for _ in range(n)]
-plan = list(map(int,input().split()))
+parent = [i for i in range(N+1)]
 
-parent = [ i for i in range(n)]
-
-def find(parent,x):
-    if parent[x] !=x:
+def find(parent, x):
+    if parent[x] != x:
         parent[x] = find(parent, parent[x])
 
     return parent[x]
 
 def union(parent, a,b):
-    a=find(parent,a)
+    a = find(parent,a)
     b = find(parent,b)
-    if a<b:
-        parent[b] = a
+
+    if a>b:
+        parent[a]=b
     else:
-        parent[a] = b
+        parent[b]=a
 
 
-for i in range(n):
-    for j in range(n):
-        if graph[i][j]==1 and find(parent,i)!=find(parent,j):
-            union(parent,i,j)
+for i in range(N):
+    for j in range(N):
+        if cities[i][j]==1:
+            union(parent,i+1,j+1)
 
-answer = 'YES'
-root = parent[plan[0]-1]
-for p in plan:
-    if parent[p-1] != root:
+
+
+
+
+answer = "YES"
+start = plan[0]
+
+for i in plan:
+    end = i
+    if find(parent,start) != find(parent,end):
         answer="NO"
         break
+    start = i
 
 print(answer)
