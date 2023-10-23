@@ -1,27 +1,24 @@
-
 import sys
 
-n,m = map(int,input().split())
+N,M = map(int,input().split())
 
 trees = list(map(int,sys.stdin.readline().split()))
 
-right = int(1e9)
-left = 1
-answer=0
+start = 0
+end = int(1e9)
 
-while left<=right:
-    length=0
-    mid = (left+right)//2
+while start<=end:
+    temp = 0
+    height = (start+end)//2
 
-    for tree in trees:
-        if tree>mid:
-            length+=tree-mid
+    for t in trees:
+        if t > height:
+            temp+=t-height
 
-        
-    if length<m:
-        right=mid-1
-    else:
-        answer = max(answer, mid)
-        left=mid+1
+    if temp<M:
+        end = height-1
+    elif temp>=M:
+        start = height+1
 
-print(answer)
+
+print(end)
