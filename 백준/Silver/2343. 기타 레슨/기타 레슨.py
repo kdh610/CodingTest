@@ -1,35 +1,27 @@
 import sys
 
-n,m = map(int,input().split())
-
+N,M = map(int,input().split())
 lecture = list(map(int,sys.stdin.readline().split()))
 
-left = 1
-right = int(1e9)
-answer = int(1e9)
+start,end=max(lecture),int(1e9)
+total=sum(lecture)
+answer=int(1e9)
+while start<=end:
+    mid = (start+end)//2
 
-while left <= right:
-    mid = (left+right)//2
-    cnt = 1
+    cnt=1
     sum=0
-    if mid<max(lecture):
-        left =mid+1
-        continue
-
-
     for i in lecture:
-        sum+=i
-        if sum>mid:
-            sum=i
+        if sum+i<=mid:
+            sum+=i
+        else:
             cnt+=1
+            sum=i
 
-
-
-    if cnt>m:
-        left=mid+1
+    if cnt>M:
+        start=mid+1
     else:
-        right = mid - 1
+        end = mid - 1
         answer=min(answer,mid)
-
 
 print(answer)
