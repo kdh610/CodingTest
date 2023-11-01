@@ -1,27 +1,28 @@
+import sys
 
-n = int(input())
-k = int(input())
 
-answer = n**2
-left = 0
-right = n**2
+n=int(input())
+k=int(input())
 
-# k번째 수는 그 수보다 작은 수가 k-1개 있다는 의미
-while left <= right:
-    mid = (left+right)//2
-    cnt = 0
-    #각행 마다 mid보다 작은 수 갯수 카운트
+
+start,end=1,int(1e10)
+answer=0
+while start<=end:
+
+    mid=(start+end)//2
+
+    cnt=0
     for i in range(1,n+1):
-        cnt += min(mid // i, n)
+        if n*i<mid:
+            cnt+=n
+        else:
+            cnt+=mid//i
 
-    if cnt < k:
-        left = mid+1
+    if cnt>=k:
+        end=mid-1
+        answer=mid
     else:
-        right = mid-1
-        answer = min(answer,mid)
+        start=mid+1
+
 
 print(answer)
-
-
-
-
