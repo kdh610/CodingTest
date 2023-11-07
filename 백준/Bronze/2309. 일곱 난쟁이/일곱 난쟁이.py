@@ -1,22 +1,29 @@
-arr = []
+import sys
 
-for _ in range(9):
-    arr.append(int(input()))
 
-answer =[]
-for i in range(9):
-    result = []
-    for j in range(i + 1, 9):
-        for k in range(9):
-            if k == i or k == j:
-                continue
-            result.append(arr[k])
-        # print(result)
-        if len(result) == 7 and sum(result) == 100:
-            answer = result
+height=[int(input()) for _ in range(9)]
+
+
+
+
+sum=sum(height)
+
+
+for i in range(8):
+
+    a=height[i]
+    for j in range(i+1,9):
+
+        b=height[j]
+
+        if a+b == sum-100:
+            height.remove(a)
+            height.remove(b)
             break
-        result.clear()
-    if len(result) == 7 and sum(result) == 100:
+    if a + b == sum - 100:
         break
 
-print(*sorted(answer),sep='\n')
+height.sort()
+
+for i in height:
+    print(i)
