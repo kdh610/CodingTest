@@ -15,16 +15,16 @@ for i in range(n):
 
             for r in range(8):
                 for c in range(8):
-                    if r%2==0 or r==0:
-                        if (c%2==0 or c==0) and tmp[r][c] == 'W':
+                    if r%2==0:
+                        if c%2==0 and tmp[r][c] == 'W':
                             cnt += 1
-                        if (c%2==1 ) and tmp[r][c]=='B':
+                        if c%2==1 and tmp[r][c]=='B':
                             cnt+=1
                     else:
 
-                        if (c%2==0 or c==0) and tmp[r][c] == 'B':
+                        if  c%2==0 and tmp[r][c] == 'B':
                             cnt += 1
-                        if (c%2==1) and tmp[r][c]=='W':
+                        if c%2==1 and tmp[r][c]=='W':
                             cnt+=1
 
             answer=min(answer,cnt,64-cnt)
