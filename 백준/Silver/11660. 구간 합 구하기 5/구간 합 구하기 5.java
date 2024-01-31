@@ -11,6 +11,7 @@ public class Main {
 		int end;
 		StringTokenizer st;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuffer sb = new StringBuffer();
 		
 		st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
@@ -60,11 +61,14 @@ public class Main {
 			sum = dp[x2][y2] - dp[x2][y1-1] - dp[x1-1][y2] + dp[x1-1][y1-1];
 			
 			
-			
-			System.out.println(sum);
+			sb.append(sum);
+			sb.append("\n");
+//			System.out.println(sum);
 			
 			
 		}
+		
+		System.out.println(sb.toString());
 		
 		
 	}
