@@ -1,55 +1,66 @@
-from collections import *
-def balance_str(str):
-    dict = defaultdict(int)
-    index=0
-    for i in range(len(str)):
-        dict[str[i]]+=1
 
-        if dict['(']==dict[')']:
-            index=i
-            break
-    return index
-
-def right_str(str):
-    stack = []
-    for s in str:
-        if not stack:
-            stack.append(s)
-            continue
-
-        if s=='(':
-            stack.append('(')
-        else:
-            if stack[-1]=='(':
-                stack.pop()
-    if not stack:
-        return True
-    else:
-        return False
 
 def solution(p):
-    if p=='':
+
+    if p == '':
         return ''
 
-    idx = balance_str(p)
-    u = p[:idx+1]
-    v = p[idx+1:]
+    u,v = split_bracket(p)
+    perfect = check_perfect(u)
 
-
-    flag = right_str(u)
-    if flag:
-        u+=solution(v)
-        return u
+    if perfect:
+        result = solution(v)
+        answer = u+result
     else:
-        empty ='('
-        empty+=solution(v)
-        empty+=')'
-        u=u[1:-1]
-        reverse=''
-        for i in u:
-            if i=='(':
-                reverse+=')'
-            else:
-                reverse+='('
-        empty+=reverse
-        return empty
+        result = solution(v)
+        result = '('+result +')'
+        arr=list(u[1:-1])
+
+        for i in range(len(arr)):
+            if arr[i] == '(':
+                arr[i] = ')'
+            elif arr[i] == ')':
+                arr[i] = '('
+        u= ''.join(arr)
+
+
+        answer = result+u
+
+
+    return answer
+
+def check_perfect(u):
+    stack = []
+    if u[0] == ')':
+        return False
+
+    stack.append(u[0])
+    for i in range(1,len(u)):
+        if stack[-1] == u[i]:
+            stack.append(u[i])
+        else:
+            stack.pop()
+
+    if len(stack)>0:
+        return False
+    else:
+        return True
+
+
+def split_bracket(p):
+    stack = []
+    l_bracket = 0
+    r_bracket = 0
+
+    for i in p:
+        if i == '(':
+            l_bracket += 1
+            stack.append(i)
+        else:
+            r_bracket += 1
+            stack.append(i)
+
+        if l_bracket == r_bracket:
+            break
+    return p[:len(stack)], p[len(stack):]
+
