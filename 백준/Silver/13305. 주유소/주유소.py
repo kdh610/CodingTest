@@ -1,29 +1,36 @@
 
 import sys
+from heapq import *
 
 n = int(input())
-length = list(map(int,sys.stdin.readline().split()))
+length =[0]+ list(map(int,sys.stdin.readline().split()))
 price = list(map(int,sys.stdin.readline().split()))
 
+for i,v in enumerate(price):
+    price[i] = (v,i)
+
+for i in range(1,len(length)):
+    length[i] += length[i-1]
+
+#print(length)
 answer = 0
 
-def find_min(price, start, end):
-    global answer
-    min_price = min(price[start:end])
-    min_idx = price.index(min_price)
-
-    distance = sum(length[min_idx:end])
-    answer += distance * min_price
-
-    if min_idx!=0:
-        find_min(price, 0, min_idx)
+heap = price[0:n-1]
+heapify(heap)
+min_idx=n
+end= n-1
+while min_idx!=0:
 
 
-find_min(price,0,n)
+
+    min_price, min_idx = heappop(heap)
+    if min_idx < end:
+
+
+        distance = length[end] - length[min_idx]
+        answer += distance * min_price
+        end = min_idx
+
+
 
 print(answer)
-
-
-
-
-
