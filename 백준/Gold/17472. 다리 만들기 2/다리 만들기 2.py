@@ -1,96 +1,116 @@
+
 from collections import *
-N,M = map(int,input().split())
-board = [list(map(int,input().split())) for _ in range(N)]
-visit = [[False]*M for _ in range(N)]
-dy=[0,0,1,-1]
-dx=[1,-1,0,0]
 
-island_num=1
-Q = deque()
-for i in range(N):
-    for j in range(M):
-        if board[i][j]==1 and not visit[i][j]:
-            island_num += 1
-            Q.append((i,j))
-            visit[i][j] = True
-            board[i][j] = island_num
-            while Q:
-                y,x = Q.popleft()
-                for k in range(4):
-                    ny = y + dy[k]
-                    nx = x + dx[k]
-                    if 0<=ny<N and 0<=nx<M and board[ny][nx]==1:
-                        board[ny][nx] = island_num
-                        Q.append((ny,nx))
-                        visit[ny][nx] = True
-#print(*board,sep='\n')
+n,m = map(int, input().split())
 
-graph = []
+island = [ list(map(int,input().split())) for _ in range(n)]
 
-for i in range(N):
-    for j in range(M):
-        if board[i][j]!=0:
-            start = board[i][j]
-            end = -1
-            Q.append((i,j))
+island_dict = defaultdict(list)
+number = 2
+visit = [ [False]*m for _ in range(n)]
 
-            while Q:
-                y,x = Q.popleft()
-                #print('y,x',y,x)
-                for k in range(4):
-                    length = 0
-                    ny = y + dy[k]
-                    nx = x + dx[k]
+dy = [0,0,1,-1]
+dx = [1,-1,0,0]
 
-                    while 0<=ny<N and 0<=nx<M and board[ny][nx]==0:
-                        #print('ny,nx', ny, nx, board[ny][nx])
-                        length+=1
-                        ny+=dy[k]
-                        nx+=dx[k]
-
-                        if ny<0 or ny>=N or nx<0 or nx>=M: break
-
-                        if board[ny][nx]!=0 and length>=2:
-                            #print(ny,nx, board[ny][nx])
-                            end=board[ny][nx]
-                            graph.append((start,end,length))
-                            #print(graph)
-                            break
-
-#print(graph)
+def bfs(y,x, number):
+    q = deque()
+    q.append((y,x))
+    visit[y][x] = True
+    island[y][x] = number
+    island_dict[number].append((y,x))
+    while q:
+        y,x = q.popleft()
+        for i in range(4):
+            ny = y + dy[i]
+            nx = x + dx[i]
+            if 0<=ny<n and 0<=nx<m and not visit[ny][nx]:
+                if island[ny][nx]==1:
+                    visit[ny][nx] = True
+                    island[ny][nx] = number
+                    island_dict[number].append((ny, nx))
+                    q.append((ny,nx))
 
 
-parent = [ i for i in range(island_num+1)]
+for i in range(n):
+    for j in range(m):
+        if island[i][j]==1:
+            bfs(i,j,number)
+            number+=1
 
+
+bridge = set()
+
+
+for i in island_dict:
+    for y,x in island_dict[i]:
+
+        for j in range(4):
+            ny = y+dy[j]
+            nx = x+dx[j]
+
+            if 0<=ny<n and 0<=nx<m and island[ny][nx]==0:
+                length = 1
+                while True:
+                    ny += dy[j]
+                    nx += dx[j]
+
+                    if 0<=ny<n and 0<=nx<m:
+                        if island[ny][nx] == 0:
+                            length+=1
+                            continue
+                        else:
+                            if island[ny][nx]==island[y][x]:
+                                break
+
+
+                            if length>=2:
+                                bridge.add((island[y][x], island[ny][nx], length))
+                                break
+                            else:
+                                break
+                    else:
+                        break
+
+parent = [ i for i in range(number+1)]
 
 def find(parent, x):
     if parent[x]!=x:
-        parent[x] = find(parent,parent[x])
+        parent[x] = find(parent, parent[x])
     return parent[x]
 
 def union(a,b):
-    a = find(parent,a)
-    b = find(parent,b)
+    a=find(parent,a)
+    b=find(parent,b)
 
-    if a==b: return False
+    if a==b:
+        return False
 
-    parent[b] = a
+    parent[b]=a
     return True
 
-graph.sort(key=lambda x:x[2])
+bridge = list(bridge)
+bridge.sort(key=lambda x:x[2])
 
-sum=0
-cnt=1
-for i in graph:
-    a,b,c = i
+# print(*island, sep='\n')
+# print(island_dict)
+#
+# print(bridge)
 
-    if not union(a,b): continue
-    sum+=c
+cost=0
+cnt=0
+# print(number)
+for b in bridge:
+    a,b,c = b
+
+    if not union(a,b):
+        continue
+
     cnt+=1
-    if cnt==island_num-1:
+    cost+=c
+    if cnt==number-3:
+        print(cost)
         break
-
-if cnt!=island_num-1:
-    print(-1)
 else:
-    print(sum)
+    print(-1)
+
+
