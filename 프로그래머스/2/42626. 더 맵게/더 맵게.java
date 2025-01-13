@@ -14,7 +14,7 @@ public class Solution {
         
         int cnt=0;
         while(true) {
-     	if(heap.size()==1) {
+     	    if(heap.size()==1) {
         		if(heap.poll()<K) {
         			cnt=-1;
         		}
