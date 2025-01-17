@@ -1,47 +1,64 @@
-def won(board, t):
-    # 가로줄 판단.
-    for row in board:
-        if row == [t, t, t]:
-            return True
-        
-    # 세로줄 판단.
-    for col in range(3):
-        if [board[row][col] for row in range(3)] == [t, t, t]:
-            return True
-        
-    # 대각선 판단.
-    if [board[0][0], board[1][1], board[2][2]] == [t, t, t]:
-        return True
-    if [board[2][0], board[1][1], board[0][2]] == [t, t, t]:
-        return True
-    
-    return False
-        
 def solution(board):
-    board = [list(row) for row in board]
-    
-    # O의 개수가 X의 개수보다 같거나 1 많아야 함.
-    o_count, x_count = 0, 0
+    o=0
+    x=0
+
+    answer=1
+
+    for i in range(3):
+        for j in range(3):
+            if board[i][j]=='O':
+                o+=1
+            elif board[i][j]=='X':
+                x+=1
+
+    # 선공 여부
+    if x>o:
+        answer=0
+
+    # 연속턴 여부
+    if abs(o-x)>=2:
+        answer=0
+
+    # 승리 후 진행 여부
+    o_win = False
+    x_win = False
+    # 가로
     for row in board:
-        for c in row:
-            if c == 'O':
-                o_count += 1
-            if c == 'X':
-                x_count += 1
+        if row=="OOO":
+            o_win=True
+        elif row=="XXX":
+            x_win=True
 
-    if not (o_count == x_count or o_count == x_count + 1):
-        return 0
+    # print(*list(zip(*board)), sep='\n')
+    # 세로
+    for row in list(zip(*board)):
+        if ''.join(row) == "OOO":
+            o_win = True
+        elif ''.join(row) == "XXX":
+            x_win = True
 
-    # O 혹은 X만 승리조건을 만족해야 함.
-    if won(board, 'O') and won(board, 'X'):
-        return 0
+
+    # 대각
+    if board[0][0]=='O' and (board[0][0]==board[1][1]==board[2][2]):
+        o_win=True
+    if board[0][2]=='O' and (board[0][2]==board[1][1]==board[2][0]):
+        o_win=True
+    if board[0][0]=='X' and (board[0][0]==board[1][1]==board[2][2]):
+        x_win=True
+    if board[0][2]=='X' and (board[0][2]==board[1][1]==board[2][0]):
+        x_win=True
+
+    if o_win and not x_win and o - x != 1:
+        answer = 0
+    elif x_win and not o_win and o != x:
+        answer = 0
+    elif o_win and x_win:
+        answer = 0
+    elif o-x>1:
+        answer=0
+
+
+        
     
-    # O가 승리했다면 o_count == x_count + 1이어야 함.
-    if won(board, 'O') and o_count != x_count + 1:
-        return 0
-    
-    # X가 승리했다면 o_count == x_count 여야 함.
-    if won(board, 'X') and o_count != x_count:
-        return 0
-
-    return 1
+        
+    return answer
