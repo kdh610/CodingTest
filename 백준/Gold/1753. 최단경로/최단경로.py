@@ -1,43 +1,43 @@
-
+import heapq
 import sys
 from heapq import *
-
-INF=int(1e9)
 v,e = map(int,input().split())
-start = int(input())
 
-graph=[[] for _ in range(v+1)]
-distance=[INF]*(v+1)
+k = int(input())
 
-for i in range(e):
-    a,b,c = map(int,sys.stdin.readline().split())
+graph = [[] for _ in range(v+1)]
+
+
+for _ in range(e):
+    a,b,c=map(int, sys.stdin.readline().split())
     graph[a].append((b,c))
 
+distance = [int(1e9)]*(v+1)
 
-
-def dijstra(start):
-
-    q = []
-
-    heappush(q,(0,start))
+def dijkstra(start):
+    q=[]
+    heapq.heappush(q,(0,start))
     distance[start]=0
 
     while q:
-        dist, node = heappop(q)
+        dist, now = heapq.heappop(q)
 
-        if dist > distance[node]:
+        if distance[now]<dist:
             continue
 
-        for i in graph[node]:
-            cost = i[1] + dist
-            if distance[i[0]] > cost:
-                distance[i[0]] = cost
-                heappush(q,(cost,i[0]))
+        for i in graph[now]:
+            node, c = i
+            cost = dist + c
 
-dijstra(start)
+            if cost<distance[node]:
+                distance[node]=cost
+                heapq.heappush(q,(cost, node))
+dijkstra(k)
+
+# print(distance)
 
 for i in range(1,v+1):
-    answer = distance[i]
-    if answer==int(1e9):
-        answer='INF'
-    print(answer)
+    if distance[i]==int(1e9):
+        print('INF')
+    else:
+        print(distance[i])
