@@ -1,41 +1,46 @@
 from collections import *
 def solution(n, wires):
-    graph = [[] for _ in range(n+1)]
+    answer = int(1e9)
+    graph = defaultdict(list)
 
     for wire in wires:
-        a,b = wire
-        graph[a].append(b)
-        graph[b].append(a)
+        s = wire[0]
+        e = wire[1]
+        graph[s].append(e)
+        graph[e].append(s)
 
-    def bfs(start,visit):
-        Q= deque()
+
+    def bfs(start, end):
+
+        Q = deque()
         Q.append(start)
-        visit[start]=True
-        cnt=1
+        visit = [False] * (n+1)
+        visit[start] = True
+        cnt =1
+
         while Q:
-            top = Q.popleft()
-            for t in graph[top]:
-                if not visit[t]:
-                    visit[t]=True
+            x = Q.popleft()
+            for v in graph[x]:
+                if v == end:
+                    continue
+
+                if not visit[v]:
+                    visit[v]=True
                     cnt+=1
-                    Q.append(t)
+                    Q.append(v)
         return cnt
 
-    answer=int(1e9)
 
     for wire in wires:
-        a,b = wire
-        graph[a].remove(b)
-        graph[b].remove(a)
+        s = wire[0]
+        e = wire[1]
 
-        visit = [False]*(n+1)
+        cnt1= bfs(s,e)
+        cnt2 = bfs(e,s)
 
-        cnt1 = bfs(a,visit)
-        cnt2 = bfs(b,visit)
 
-        if abs(cnt1-cnt2) < answer:
-            answer=abs(cnt1-cnt2)
+        result  = abs(cnt1-cnt2)
 
-        graph[a].append(b)
-        graph[b].append(a)
+        answer = min(answer,result)
+
     return answer
