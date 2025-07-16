@@ -1,33 +1,25 @@
 from itertools import *
 from collections import *
-
 def solution(orders, course):
-    course_dict = defaultdict(list)
-    course_len = [0]*11
-    course_dish = defaultdict(list)
+    dict = defaultdict(list)
 
     for c in course:
-
         for order in orders:
-
+            order = sorted(order)
             for comb in list(combinations(order,c)):
-                tmp = sorted(comb)
-
-                course_dict[c].append(tuple(tmp))
-                # if course_dict[comb] > course_len[c]:
-                #     course_len[c] = course_dict[comb]
-
-    answer=[]
-    for k in course_dict:
+                dict[c].append(comb)
 
 
-        counter = Counter(course_dict[k]).most_common()
-        max_val = 0
-        for key,cnt in counter:
-            if cnt<=1: break
-            if max_val<=cnt:
-                max_val=cnt
-                answer.append(''.join(key))
+    answer= []
+    for i in dict:
+        count = Counter(dict[i]).most_common()
 
-    answer = sorted(answer)
+        MAX=count[0][1]
+        if MAX<2:
+            continue
+        answer.append(''.join(count[0][0]))
+        for j in range(1,len(count)):
+            if count[j][1] == MAX:
+                answer.append(''.join(count[j][0]))
+    answer.sort()
     return answer
