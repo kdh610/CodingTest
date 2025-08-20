@@ -1,45 +1,40 @@
-
 def solution(m, musicinfos):
-    note= {'A#':'H', 'B#':'I','C#':'J', 'D#':'K', 'F#':'L', 'G#':'M'}
-
-    def replace_note(music):
-        for k,v in note.items():
-            music = music.replace(k,v)
-
-        return music
-
-
-    new_info = []
-
-    for i,music in enumerate(musicinfos):
-        start, end, title, score = music.split(',')
-
-        start_H, start_M = start.split(':')
-        start = int(start_H)*60 + int(start_M)
-
-        end_H, end_M = end.split(':')
-        end = int(end_H) * 60 + int(end_M)
-
-        time = end-start
-        score = replace_note(score)
-
-        full_score = ''
-        for j in range(time):
-            full_score+=score[j%len(score)]
-
-        new_info.append((time,i,title,full_score))
-
-    m=replace_note(m)
-
-    answer=[]
-    for music in new_info:
-        if m in music[3]:
-            answer.append(music)
+    answer='(None)'
+    max_time = 0
+    m=(m.replace('C#', 'V')
+        .replace('D#', 'W')
+        .replace('F#', 'X')
+        .replace('G#', 'Y')
+        .replace('A#', 'Z')
+      .replace('B#', 'F'))
 
 
-    answer.sort(key=lambda x:[-x[0],x[1]])
+    for i in musicinfos:
+        info = i.split(",")
+        start_h = info[0].split(":")[0]
+        start_m = info[0].split(":")[1]
+        start_time = int(start_h)*60 + int(start_m)
 
-    if not answer:
-        return '(None)'
-    else:
-        return answer[0][2]
+        end_h = info[1].split(":")[0]
+        end_m = info[1].split(":")[1]
+        end_time = int(end_h) * 60 + int(end_m)
+        title = info[2]
+        notes = (info[3]
+                 .replace('C#', 'V')
+                 .replace('D#', 'W')
+                 .replace('F#', 'X')
+                 .replace('G#', 'Y')
+                 .replace('A#', 'Z') .replace('B#', 'F'))
+
+        play_time = end_time - start_time
+        music_length = len(notes)
+
+
+        music = notes * (play_time//music_length) + notes[:(play_time%music_length)]
+
+        if m in music:
+            if max_time < play_time:
+                max_time = play_time
+                answer = title
+
+    return answer
